@@ -1,0 +1,296 @@
+================================================================================
+CARCERIAN NUI SYSTEM v1.0 - ARCHITECTURE GUIDE
+================================================================================
+
+UNDERSTANDING NUI WINDOWS
+================================================================================
+
+This guide explains how NUI (Native User Interface) windows work in NWN:EE.
+It uses code examples for illustration purposes only - these are NOT meant
+to be included in actual scripts.
+
+USE THE POPUP FUNCTIONS PROVIDED BY THE CARCERIAN SYSTEM INSTEAD.
+
+
+CORE CONCEPTS
+================================================================================
+
+1. WINDOW ID
+   - Unique identifier for a window type
+   - Example: "message_popup", "sign_board"
+   - Used to differentiate between multiple window types on same player
+
+2. WINDOW TOKEN
+   - Numeric handle returned by NuiCreate()
+   - Used to reference window for updates/closes
+   - Example: NuiDestroy(oPC, nToken);
+
+3. WINDOW LIFECYCLE
+   - Create: NuiCreate(oPC, jWindow, sScript) → returns nToken
+   - Update: NuiSetBind(oPC, nToken, "bind_name", jValue)
+   - Event:  OnNuiEvent script receives click/change events
+   - Close:  NuiDestroy(oPC, nToken)
+
+
+ARCHITECTURE PATTERN
+================================================================================
+
+Here's the pattern NUI windows follow:
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PART 1: DECLARE WINDOW                                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  const string WINDOW_ID = "my_window";                                  │
+│                                                                           │
+│  - Unique ID for this window type                                        │
+│  - Used in event handler to identify which window sent event             │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PART 2: CREATE WINDOW                                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  void CreateWindow(object oPC)                                          │
+│  {                                                                        │
+│      // 1. Build content as JSON                                        │
+│      json jContent = NuiLabel(...);                                     │
+│                                                                           │
+│      // 2. Wrap in window                                               │
+│      json jWindow = NuiWindow(jContent, ...);                           │
+│                                                                           │
+│      // 3. Create and get token                                         │
+│      int nToken = NuiCreate(oPC, jWindow, "event_handler");            │
+│                                                                           │
+│      // 4. Set binds (dynamic values)                                   │
+│      NuiSetBind(oPC, nToken, "title", JsonString("Title"));            │
+│      NuiSetBind(oPC, nToken, "geometry", NuiRect(...));                │
+│  }                                                                        │
+│                                                                           │
+│  - NuiCreate returns token (int handle to window)                        │
+│  - NuiSetBind updates dynamic content                                    │
+│  - Window is now visible to player                                       │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PART 3: HANDLE EVENTS                                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  void OnNuiEvent()  // Called from module OnNuiEvent                    │
+│  {                                                                        │
+│      object oPlayer = NuiGetEventPlayer();                              │
+│      int nToken = NuiGetEventWindow();                                  │
+│      string sEvent = NuiGetEventType();      // "click", "change", etc  │
+│      string sElement = NuiGetEventElement(); // button ID, label ID     │
+│                                                                           │
+│      // Identify which window sent event                                 │
+│      string sWindowId = NuiGetWindowId(oPlayer, nToken);               │
+│                                                                           │
+│      if (sWindowId == WINDOW_ID)                                        │
+│      {                                                                    │
+│          // Handle events for this window                                │
+│          if (sEvent == "click" && sElement == "button_ok")             │
+│          {                                                                │
+│              NuiDestroy(oPlayer, nToken);  // Close window              │
+│          }                                                                │
+│      }                                                                    │
+│  }                                                                        │
+│                                                                           │
+│  - Player interacts with window                                          │
+│  - OnNuiEvent script receives event                                      │
+│  - Script identifies window via WINDOW_ID                                │
+│  - Script processes click/change/etc                                     │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ PART 4: CLOSE WINDOW                                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  NuiDestroy(oPlayer, nToken);                                           │
+│                                                                           │
+│  - Destroys window for player                                            │
+│  - Window disappears from screen                                         │
+│  - nToken is no longer valid                                             │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+EXAMPLE: MESSAGE POPUP ARCHITECTURE
+================================================================================
+
+Following the pattern above, here's how a message popup works:
+
+// PART 1: DECLARE
+const string MESSAGE_WINDOW = "message_popup";
+
+// PART 2: CREATE
+void ShowMessage(object oPC, string sTitle, string sMessage)
+{
+    // Build content JSON
+    json jContent = NuiCol(JsonArray2(
+        NuiLabel(JsonString(sMessage), NUI_HALIGN_CENTER, NUI_VALIGN_MIDDLE),
+        NuiButton(JsonString("OK"))
+    ));
+
+    // Wrap in window
+    json jWindow = NuiWindow(jContent, JsonString(sTitle), 
+                            NuiBind("geometry"), ...);
+
+    // Create window
+    int nToken = NuiCreate(oPC, jWindow, "event_handler");
+
+    // Set binds
+    NuiSetBind(oPC, nToken, "geometry", NuiRect(-1.0f, 170.0f, 312.5f, 156.25f));
+
+    // Store token for handler
+    SetLocalInt(oPC, "MSG_TOKEN", nToken);
+}
+
+// PART 3: HANDLE EVENT
+void OnNuiEvent()
+{
+    object oPC = NuiGetEventPlayer();
+    string sWindowId = NuiGetWindowId(oPC, NuiGetEventWindow());
+    string sEvent = NuiGetEventType();
+    string sElement = NuiGetEventElement();
+
+    if (sWindowId == MESSAGE_WINDOW && sEvent == "click")
+    {
+        // PART 4: CLOSE
+        int nToken = GetLocalInt(oPC, "MSG_TOKEN");
+        NuiDestroy(oPC, nToken);
+        DeleteLocalInt(oPC, "MSG_TOKEN");
+    }
+}
+
+
+KEY DIFFERENCES: CUSTOM NUI vs CARCERIAN SYSTEM
+================================================================================
+
+CUSTOM NUI (Example Pattern Above):
+  - You build JSON manually
+  - You handle all events yourself
+  - You must track window tokens
+  - More control, more code
+
+CARCERIAN SYSTEM (What You Should Use):
+  - Use NUI_PopupMessage() instead of building custom JSON
+  - Event handling built-in
+  - Window tokens managed automatically
+  - Less code, less maintenance
+  - Example: NUI_PopupMessage(oPC, "Title", "Message");
+
+
+WINDOW PROPERTIES (nProps Bitmask)
+================================================================================
+
+Windows can have properties controlled via nProps flags:
+
+const int NUI_PROP_RESIZABLE = 1;      // Can be resized
+const int NUI_PROP_COLLAPSIBLE = 2;    // Can be minimized
+const int NUI_PROP_CLOSABLE = 4;       // Has X button
+const int NUI_PROP_BORDER = 8;         // Visible border
+const int NUI_PROP_TRANSPARENT = 16;   // Transparent background
+
+Combine with bitwise OR:
+  int nProps = NUI_PROP_CLOSABLE | NUI_PROP_RESIZABLE;
+
+Use predefined combinations:
+  NUI_PROP_NONE = 0
+  NUI_PROP_CLOSABLE_ONLY = 4
+  NUI_PROP_CLOSABLE_TRANSPARENT = 20
+  NUI_PROP_ALL = 31
+
+
+BINDS: DYNAMIC CONTENT
+================================================================================
+
+Binds are named placeholders that can be updated without recreating window:
+
+// Create with bind
+NuiWindow(..., NuiBind("title"), NuiBind("geometry"), ...);
+
+// Update bind
+NuiSetBind(oPC, nToken, "title", JsonString("New Title"));
+
+// Use cases:
+- Update labels with player data
+- Change window position
+- Update button text
+- Change visibility
+
+
+EVENT TYPES
+================================================================================
+
+NuiGetEventType() returns:
+  "blur"          - Window lost focus
+  "click"         - Button clicked or clicked elsewhere
+  "close"         - Window closed (X button)
+  "focus"         - Window gained focus
+  "mousedown"     - Mouse button down
+  "mousescroll"   - Mouse wheel scrolled
+  "mouseup"       - Mouse button released
+  "open"          - Window opened
+  "range"         - Slider/range changed
+  "watch"         - Watched value changed
+
+
+AOE INTEGRATION
+================================================================================
+
+AOE windows auto-close when player exits area:
+
+// Create with AOE
+int nToken = NUI_DialogCreate(oPC, title, content, 1, "", "handler",
+                             nProps, 625.0f, 312.5f, TRUE);
+
+// Automatic behavior:
+// 1. AOE created at player location
+// 2. Window opens for player
+// 3. Player moves out of AOE radius
+// 4. NUI_AOE_OnExit triggered
+// 5. Window auto-closes via NuiDestroy()
+
+
+BEST PRACTICES
+================================================================================
+
+✓ DO:
+  - Use Carcerian popup functions (NUI_PopupMessage, etc)
+  - Call NuiDestroy() to close windows
+  - Store tokens in local variables if needed
+  - Check if window is valid before updating
+
+✗ DON'T:
+  - Manually build complex window JSON
+  - Use NUI_Kill() - use NuiDestroy() directly
+  - Forget to handle close events
+  - Leave windows open without cleanup
+
+
+SUMMARY
+================================================================================
+
+NUI windows follow a 4-part lifecycle:
+
+1. DECLARE    - Define window ID and creation function
+2. CREATE     - Build JSON, NuiCreate(), NuiSetBind()
+3. HANDLE     - OnNuiEvent receives clicks/changes
+4. CLOSE      - NuiDestroy() to remove window
+
+The Carcerian system handles all this internally.
+Just call the popup functions and it works.
+
+Example:
+  NUI_PopupMessage(oPC, "Title", "Message");
+  // Window appears, OK button closes it automatically.
+
+That's it. Everything else is handled.
+
+================================================================================
+END OF ARCHITECTURE GUIDE
+================================================================================

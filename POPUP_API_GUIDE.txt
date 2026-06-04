@@ -1,0 +1,375 @@
+================================================================================
+CARCERIAN NUI - POPUP API GUIDE
+================================================================================
+
+VERSION: 1.0
+FILE: nui_popup_api.nss
+FUNCTIONS: 25+ popup dialogs
+
+================================================================================
+QUICK START
+================================================================================
+
+#include "nui_popup_api"
+
+// Simple message
+NUI_PopupMessage(oPC, "Welcome", "Hello!", "nui_handler");
+
+// Get text input
+NUI_PopupText(oPC, "Name", "Enter name:", "nui_handler");
+string sName = GetLocalString(oPC, "nui_popup_text_result");
+
+// Confirmation
+NUI_PopupConfirm(oPC, "Delete?", "Are you sure?", "nui_handler");
+
+// Character editor
+NUI_PopupPC(oPC, "Edit Character", "nui_handler");
+
+// Color picker
+NUI_PopupColor(oPC, "Choose Color", "nui_handler");
+
+================================================================================
+POPUP CATEGORIES (25+ FUNCTIONS)
+================================================================================
+
+1. MESSAGE/NOTIFICATION POPUPS (5 functions)
+────────────────────────────────────────────────
+   NUI_PopupMessage() ..................... Simple message + close button
+   NUI_PopupWarning() ..................... Warning message
+   NUI_PopupError() ....................... Error message
+   NUI_PopupSuccess() ..................... Success message
+   NUI_PopupInfo() ........................ Info message
+
+   Usage: Status updates, notifications, alerts
+   
+   Returns: Dialog token (>0 = success, 0 = failed)
+
+2. CONFIRMATION POPUPS (3 functions)
+────────────────────────────────────────────────
+   NUI_PopupConfirm() ..................... OK/Cancel buttons
+   NUI_PopupYesNo() ....................... Yes/No buttons
+   NUI_PopupValidation() .................. Validation confirmation
+
+   Usage: Confirm actions, critical decisions
+   
+   Returns: Dialog token (>0 = success, 0 = failed)
+
+3. INPUT POPUPS (6 functions)
+────────────────────────────────────────────────
+   NUI_PopupText() ........................ Text input
+   NUI_PopupInput() ....................... Text input (wrapper)
+   NUI_PopupSlider() ...................... Numeric slider
+   NUI_PopupRange() ....................... Numeric range (wrapper)
+   NUI_PopupInt() ......................... Integer input with validation
+   NUI_PopupFloat() ....................... Float input with validation
+
+   Usage: Get player input, select values
+   
+   Results stored in local variables:
+   - "nui_popup_text_result"
+   - "nui_popup_slider_result"
+   - "nui_popup_int_result"
+   - "nui_popup_float_result"
+
+4. SELECTION POPUPS (2 functions)
+────────────────────────────────────────────────
+   NUI_PopupColor() ....................... RGB color picker
+   NUI_PopupChoice() ...................... Yes/No choice (wrapper)
+
+   Usage: Choose from options
+   
+   Results stored in:
+   - "nui_popup_color_red", "nui_popup_color_green", "nui_popup_color_blue"
+
+5. RPG ELEMENT POPUPS (9 functions)
+────────────────────────────────────────────────
+   NUI_PopupStats() ....................... Display character stats
+   NUI_PopupSkills() ...................... Display character skills
+   NUI_PopupInventory() ................... Display inventory
+   NUI_PopupSpells() ...................... Display spells/abilities
+   NUI_PopupQuests() ...................... Display active quests
+   NUI_PopupPerks() ....................... Display perks/feats
+   NUI_PopupClass() ....................... Display/select class
+   NUI_PopupRace() ........................ Display/select race
+   NUI_PopupAlignment() ................... Display alignment
+
+   Usage: Character information display
+   
+   Note: These can be extended to become interactive editors
+
+6. CHARACTER CUSTOMIZATION POPUPS (4 functions)
+────────────────────────────────────────────────
+   NUI_PopupPC() .......................... Main character editor
+   NUI_PopupPortrait() .................... Portrait selector
+   NUI_PopupSoundset() .................... Voice/soundset selector
+   NUI_PopupBiography() ................... Biography editor
+
+   Usage: Character customization
+   
+   Results stored in:
+   - "nui_popup_portrait_result"
+   - "nui_popup_soundset_result"
+   - "nui_popup_biography_result"
+
+================================================================================
+FUNCTION SIGNATURES
+================================================================================
+
+MESSAGE POPUPS:
+
+  int NUI_PopupMessage(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupWarning(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupError(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupSuccess(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupInfo(object oPC, string sTitle, string sMessage, string sScript)
+
+CONFIRMATION POPUPS:
+
+  int NUI_PopupConfirm(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupYesNo(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupValidation(object oPC, string sTitle, string sMessage, string sScript)
+
+INPUT POPUPS:
+
+  int NUI_PopupText(object oPC, string sTitle, string sLabel, string sScript)
+  int NUI_PopupInput(object oPC, string sTitle, string sPrompt, string sScript)
+  int NUI_PopupSlider(object oPC, string sTitle, string sLabel, 
+                      float fMin, float fMax, float fDefault, string sScript)
+  int NUI_PopupRange(object oPC, string sTitle, string sLabel,
+                     float fMin, float fMax, float fDefault, string sScript)
+  int NUI_PopupInt(object oPC, string sTitle, string sLabel,
+                   int nMin, int nMax, int nDefault, string sScript)
+  int NUI_PopupFloat(object oPC, string sTitle, string sLabel,
+                     float fMin, float fMax, float fDefault, string sScript)
+
+SELECTION POPUPS:
+
+  int NUI_PopupColor(object oPC, string sTitle, string sScript)
+  int NUI_PopupChoice(object oPC, string sTitle, string sQuestion, string sScript)
+
+RPG ELEMENT POPUPS:
+
+  int NUI_PopupStats(object oPC, string sTitle, string sScript)
+  int NUI_PopupSkills(object oPC, string sTitle, string sScript)
+  int NUI_PopupInventory(object oPC, string sTitle, string sScript)
+  int NUI_PopupSpells(object oPC, string sTitle, string sScript)
+  int NUI_PopupQuests(object oPC, string sTitle, string sScript)
+  int NUI_PopupPerks(object oPC, string sTitle, string sScript)
+  int NUI_PopupClass(object oPC, string sTitle, string sScript)
+  int NUI_PopupRace(object oPC, string sTitle, string sScript)
+  int NUI_PopupAlignment(object oPC, string sTitle, string sScript)
+
+CHARACTER CUSTOMIZATION POPUPS:
+
+  int NUI_PopupPC(object oPC, string sTitle, string sScript)
+  int NUI_PopupPortrait(object oPC, string sTitle, string sScript)
+  int NUI_PopupSoundset(object oPC, string sTitle, string sScript)
+  int NUI_PopupBiography(object oPC, string sTitle, string sScript)
+
+================================================================================
+USAGE EXAMPLES
+================================================================================
+
+EXAMPLE 1: Age Gate with Message
+
+  void OnEnter_AgeGate(object oPC)
+  {
+      #include "nui_popup_api"
+      
+      NUI_PopupMessage(oPC, "Welcome", 
+          "You must be 18+ to enter.", "nui_handler");
+  }
+
+EXAMPLE 2: Get Player Name
+
+  void StartGame(object oPC)
+  {
+      #include "nui_popup_api"
+      
+      NUI_PopupText(oPC, "Character Creation", 
+          "Enter your character name:", "nui_handler");
+      
+      // Later, retrieve: GetLocalString(oPC, "nui_popup_text_result")
+  }
+
+EXAMPLE 3: Select Difficulty
+
+  void SelectDifficulty(object oPC)
+  {
+      #include "nui_popup_api"
+      
+      NUI_PopupSlider(oPC, "Game Difficulty", 
+          "Choose difficulty level",
+          1.0, 10.0, 5.0, "nui_handler");
+      
+      // Later, retrieve: GetLocalInt(oPC, "nui_popup_slider_result")
+  }
+
+EXAMPLE 4: Color Selection
+
+  void CustomizeAppearance(object oPC)
+  {
+      #include "nui_popup_api"
+      
+      NUI_PopupColor(oPC, "Choose Hair Color", "nui_handler");
+      
+      // Later, retrieve RGB values
+      int nRed = GetLocalInt(oPC, "nui_popup_color_red");
+      int nGreen = GetLocalInt(oPC, "nui_popup_color_green");
+      int nBlue = GetLocalInt(oPC, "nui_popup_color_blue");
+  }
+
+EXAMPLE 5: Character Editor
+
+  void EditCharacter(object oPC)
+  {
+      #include "nui_popup_api"
+      
+      NUI_PopupPC(oPC, "Character Editor", "nui_handler");
+  }
+
+EXAMPLE 6: Show Stats
+
+  void ShowStats(object oPC)
+  {
+      #include "nui_popup_api"
+      
+      NUI_PopupStats(oPC, "Character Stats", "nui_handler");
+  }
+
+EXAMPLE 7: Confirm Action
+
+  void DeleteItem(object oPC)
+  {
+      #include "nui_popup_api"
+      
+      NUI_PopupConfirm(oPC, "Delete Item",
+          "Are you sure? This cannot be undone.", "nui_handler");
+      
+      // In handler, check if user clicked OK or Cancel
+  }
+
+================================================================================
+SUGGESTED ADDITIONAL POPUPS (Future Enhancements)
+================================================================================
+
+Quest System Popups:
+  ✓ NUI_PopupQuestLog() - Active quests with descriptions
+  ✓ NUI_PopupQuestReward() - Show quest rewards
+  ✓ NUI_PopupQuestAccept() - Accept quest with details
+  ✓ NUI_PopupQuestTurn() - Turn in quest
+
+Commerce Popups:
+  ✓ NUI_PopupShop() - Browse shop inventory
+  ✓ NUI_PopupBuy() - Purchase item with confirmation
+  ✓ NUI_PopupSell() - Sell item to merchant
+  ✓ NUI_PopupTrade() - Trade items
+
+Combat Popups:
+  ✓ NUI_PopupAbility() - Select ability/spell to cast
+  ✓ NUI_PopupTarget() - Select target
+  ✓ NUI_PopupHotbar() - Hotbar configuration
+  ✓ NUI_PopupCombatLog() - Combat log display
+
+Social Popups:
+  ✓ NUI_PopupConversation() - NPC dialogue system
+  ✓ NUI_PopupParty() - Party management
+  ✓ NUI_PopupGuild() - Guild management
+  ✓ NUI_PopupMail() - In-game mail system
+
+Customization Popups:
+  ✓ NUI_PopupAppearance() - Full appearance editor
+  ✓ NUI_PopupClothing() - Outfit selector
+  ✓ NUI_PopupHair() - Hair color/style selector
+  ✓ NUI_PopupBodyParts() - Body customization
+
+Settings Popups:
+  ✓ NUI_PopupOptions() - Game settings/options
+  ✓ NUI_PopupGraphics() - Graphics settings
+  ✓ NUI_PopupAudio() - Audio settings
+  ✓ NUI_PopupControls() - Control configuration
+
+Crafting Popups:
+  ✓ NUI_PopupCraft() - Crafting interface
+  ✓ NUI_PopupRecipe() - Recipe selection
+  ✓ NUI_PopupMaterials() - Material requirements
+  ✓ NUI_PopupCraftResult() - Craft result display
+
+Leveling Popups:
+  ✓ NUI_PopupLevelUp() - Level up rewards
+  ✓ NUI_PopupSkillTree() - Skill tree selection
+  ✓ NUI_PopupPerkSelection() - Perk selection screen
+
+Admin Popups:
+  ✓ NUI_PopupAdmin() - Admin tools
+  ✓ NUI_PopupBan() - Ban management
+  ✓ NUI_PopupModerator() - Moderator tools
+  ✓ NUI_PopupServerStats() - Server information
+
+================================================================================
+IMPLEMENTATION NOTES
+================================================================================
+
+Architecture:
+  - All popups use NUI_DialogCreate() from nui_api
+  - All popups follow standard layout patterns
+  - Consistent naming convention: NUI_Popup[Type]()
+  - All include "nui_popup_api" for easy development
+
+Handlers:
+  - Most popups use "nui_handler" for default handling
+  - Can use custom handlers for complex logic
+  - Results stored in local variables on PC object
+
+Local Variable Naming:
+  - Text: "nui_popup_text_result"
+  - Slider: "nui_popup_slider_result"
+  - Integer: "nui_popup_int_result"
+  - Float: "nui_popup_float_result"
+  - Color: "nui_popup_color_red", "nui_popup_color_green", "nui_popup_color_blue"
+  - Portrait: "nui_popup_portrait_result"
+  - Soundset: "nui_popup_soundset_result"
+  - Biography: "nui_popup_biography_result"
+
+Performance:
+  - All popups are lightweight
+  - Minimal memory footprint
+  - No performance overhead
+  - Suitable for production servers
+
+================================================================================
+EXTENDING THE SYSTEM
+================================================================================
+
+To add new popup types:
+
+1. Create function with consistent naming:
+   int NUI_PopupXyz(object oPC, string sTitle, params..., string sScript)
+
+2. Follow standard pattern:
+   - Check GetIsPC(oPC) at start
+   - Build JSON content
+   - Call NUI_DialogCreate()
+   - Return token
+
+3. Add to forward declarations at top of file
+
+4. Store results in local variables with standard naming:
+   "nui_popup_xyz_result"
+
+5. Update documentation
+
+Example:
+
+  int NUI_PopupNewFeature(object oPC, string sTitle, string sScript)
+  {
+      if (!GetIsPC(oPC)) return 0;
+      
+      json jContent = BuildYourContent();
+      
+      return NUI_DialogCreate(oPC, sTitle, jContent, 
+                             NUI_BTN_OK + NUI_BTN_CANCEL,
+                             "NOSCALE_CENTER", sScript, -1, 600.0, 300.0);
+  }
+
+================================================================================

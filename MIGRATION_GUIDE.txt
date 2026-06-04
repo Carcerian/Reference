@@ -1,0 +1,202 @@
+================================================================================
+CARCERIAN NUI v1.0 - MIGRATION GUIDE
+================================================================================
+
+OLD SYSTEM → NEW SYSTEM
+================================================================================
+
+BEFORE (Old Development):
+  ├─ nui_popups.nss (split implementation)
+  │  ├─ NUI_PopupMessage
+  │  ├─ NUI_PopupText
+  │  ├─ [other functions scattered]
+  │  └─ Result: Hard to navigate, difficult maintenance
+  │
+  └─ Multiple include paths
+
+AFTER (Current Production v1.0):
+  ├─ nui_popup_api.nss (SINGLE FILE - 44 functions)
+  │  ├─ All functions A-Z
+  │  ├─ Forward declarations
+  │  ├─ All implementations
+  │  ├─ Clean organization
+  │  └─ Easy to discover & maintain
+  │
+  ├─ nui_doc.nss (709 lines of documentation)
+  │  ├─ API reference
+  │  ├─ Usage examples
+  │  ├─ Best practices
+  │  └─ Complete guide
+  │
+  └─ Single include path
+
+================================================================================
+MIGRATION CHECKLIST
+================================================================================
+
+STEP 1: BACKUP
+  [ ] Backup your current game directory
+  [ ] Backup your current NWN scripts directory
+
+STEP 2: DELETE OLD FILES
+  [ ] DELETE: nui_popups.nss (if it exists in your source directory)
+  [ ] DELETE: Any compiled nui_popups.ncs files
+  [ ] DELETE: Any other old popup-related files
+
+STEP 3: EXTRACT NEW SYSTEM
+  [ ] Extract CARCERIAN_NUI_COMPLETE_API.zip
+  [ ] Copy all NSS files to your scripts directory
+  [ ] Keep ALL files (37 total NSS files)
+
+STEP 4: UPDATE INCLUDES
+  Find all files that include "nui_popups":
+  
+    OLD:  #include "nui_popups"
+    NEW:  #include "nui_popup_api"
+  
+  [ ] Search your codebase for "nui_popups"
+  [ ] Replace with "nui_popup_api"
+  [ ] Verify no references to old file remain
+
+STEP 5: RECOMPILE
+  [ ] Delete all .ncs compiled files in NWN directory
+  [ ] Recompile all scripts
+  [ ] Verify no compilation errors
+  [ ] Test popup dialogs in-game
+
+STEP 6: VERIFY
+  [ ] All 44 popups available (A-Z in nui_popup_api.nss)
+  [ ] Documentation accessible (nui_doc.nss)
+  [ ] No "DUPLICATE FUNCTION" errors
+  [ ] Game running without errors
+
+================================================================================
+FILE REFERENCE
+================================================================================
+
+ALWAYS USE THESE FILES:
+  ✓ nui_popup_api.nss       - All 44 popup functions (MAIN)
+  ✓ nui_doc.nss             - Complete documentation
+  ✓ nui_api.nss             - Core API (dependency)
+  ✓ nui_handler.nss         - Default popup handler
+  ✓ All other 33 NSS files  - Supporting modules
+
+NEVER USE THESE:
+  ✗ nui_popups.nss          - OLD - DELETE THIS
+  ✗ Any old popup variants
+
+================================================================================
+INCLUDE STATEMENTS
+================================================================================
+
+IN YOUR SCRIPTS:
+
+  For popups:
+    #include "nui_popup_api"
+
+  For core API:
+    #include "nui_api"
+
+  For event handling:
+    #include "nui_handler"
+
+  For documentation (reference only, don't compile):
+    - Read nui_doc.nss for examples
+
+NEVER:
+    #include "nui_popups"  (this is the old file)
+
+================================================================================
+COMMON ERRORS & FIXES
+================================================================================
+
+ERROR: DUPLICATE FUNCTION IMPLEMENTATION (NUI_PopupMessage)
+FIX:    Delete nui_popups.nss from your source directory
+
+ERROR: Cannot find include "nui_popup_api"
+FIX:    Ensure nui_popup_api.nss is in your script source directory
+        Check file name spelling (exactly: nui_popup_api.nss)
+
+ERROR: Undefined function NUI_PopupXyz
+FIX:    Ensure #include "nui_popup_api" is at top of script
+
+ERROR: Compilation fails in nui_handler
+FIX:    Verify ALL 37 NSS files are present in source directory
+        Check that dependencies (nui_api, nui_validate, etc) exist
+
+================================================================================
+VERIFICATION CHECKLIST
+================================================================================
+
+In your source directory, you should have:
+
+  ✓ nui_api.nss
+  ✓ nui_api_handle.nss
+  ✓ nui_api_json.nss
+  ✓ nui_body_adj.nss
+  ✓ nui_body_api.nss
+  ✓ nui_cf_api.nss
+  ✓ nui_ct_api.nss
+  ✓ nui_ct_eq.nss
+  ✓ nui_data.nss
+  ✓ nui_doc.nss
+  ✓ nui_em_api.nss
+  ✓ nui_emote.nss
+  ✓ nui_enter.nss
+  ✓ nui_event.nss
+  ✓ nui_handler.nss
+  ✓ nui_item_ref.nss
+  ✓ nui_leave.nss
+  ✓ nui_load.nss
+  ✓ nui_log.nss
+  ✓ nui_mod_event.nss
+  ✓ nui_persist.nss
+  ✓ nui_plc.nss
+  ✓ nui_plc_api.nss
+  ✓ nui_popup_api.nss      <- NEW (REQUIRED)
+  ✓ nui_pvp.nss
+  ✓ nui_pvp_api.nss
+  ✓ nui_rest.nss
+  ✓ nui_rest_api.nss
+  ✓ nui_safe_per.nss
+  ✓ nui_shop.nss
+  ✓ nui_shop_evt.nss
+  ✓ nui_tailor_per.nss
+  ✓ nui_talk.nss
+  ✓ nui_talk_evt.nss
+  ✓ nui_validate.nss
+  ✓ nui_vfx.nss
+  ✓ nui_vfx_api.nss
+
+  ✗ nui_popups.nss        <- OLD (DELETE)
+
+You should have exactly 37 NSS files.
+
+================================================================================
+SUMMARY
+================================================================================
+
+OLD SYSTEM:
+  - Multiple files
+  - Scattered functions
+  - Hard to maintain
+  - Duplicates possible
+  - Include path confusion
+
+NEW SYSTEM v1.0:
+  - Single nui_popup_api.nss file
+  - 44 functions A-Z
+  - Clean organization
+  - Zero duplicates
+  - Clear include path
+  - Complete documentation
+  - Production ready
+
+ACTION:
+  1. Delete nui_popups.nss
+  2. Use nui_popup_api.nss instead
+  3. Update includes
+  4. Recompile
+  5. Done!
+
+================================================================================

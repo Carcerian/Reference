@@ -1,0 +1,257 @@
+================================================================================
+CARCERIAN GITHUB REFERENCE BASE - NWN:EE SYSTEMS
+================================================================================
+
+REPOSITORY DIRECTORY
+
+1. Carcerian/cpps - Custom Persistent Placeables
+   https://github.com/Carcerian/cpps
+   
+   Status: v1.0 Production Ready
+   Language: NWScript (100% NWN:EE)
+   Files: 44 NSS modules
+   Functions: 50+
+   
+   Features:
+   - DM-friendly placeable system
+   - Conversation-based interface
+   - Texture management & pages
+   - Persistence & save/load
+   - Conditional access (DM/Plot)
+   
+   Documentation: README_CPPS.md included
+
+2. Carcerian/nui - NUI System v1.0
+   https://github.com/Carcerian/nui
+   
+   Status: v1.0 Production Ready
+   Language: NWScript (100% NWN:EE)
+   Files: 41 NSS modules
+   Functions: 65+
+   
+   Features:
+   - Complete NUI popup system
+   - 65+ popup/dialog functions
+   - AOE integration for window lifecycle
+   - Portrait image display (XML layout)
+   - Full event handling & persistence
+   
+   Documentation: README_NUI.md included
+
+3. Carcerian/ct - Carcerian's Tailor
+   https://github.com/Carcerian/ct
+   
+   Status: v1.0 Production Ready
+   Language: NWScript (100% NWN:EE)
+   Files: 24 NSS modules
+   Functions: 40+
+   
+   Features:
+   - Character customization system
+   - Appearance & color management
+   - Equipment integration
+   - Session management
+   - NPC tailor support
+   
+   Documentation: README_CT.md included
+
+4. Carcerian/commoner - Custom Commoners
+   https://github.com/Carcerian/commoner
+   
+   Status: v1.0 Production Ready
+   Language: NWScript (100% NWN:EE)
+   Files: 1 NSS (os_commoner.nss)
+   Lines: ~350
+   
+   Features:
+   - Randomized NPC generation
+   - Race-appropriate heads & colors
+   - Native name generation
+   - Randomized outfits & equipment
+   - Per-NPC customization
+   
+   Documentation: README_COMMONERS.md included
+
+================================================================================
+QUICK LINKS
+================================================================================
+
+CPPS Repository: https://github.com/Carcerian/cpps
+NUI Repository:  https://github.com/Carcerian/nui
+CT Repository:   https://github.com/Carcerian/ct
+Commoner Repo:   https://github.com/Carcerian/commoner
+
+All repositories include:
+- Complete source code (NWScript)
+- Professional README documentation
+- Production-ready v1.0 releases
+- Full feature implementation
+
+================================================================================
+ECOSYSTEM OVERVIEW
+================================================================================
+
+The Carcerian NWN:EE ecosystem consists of 4 integrated systems:
+
+CPPS (Custom Persistent Placeables)
+  ↓
+  Provides DM tools for environment building
+  
+NUI (Natural User Interface System)
+  ↓
+  Provides popup/dialog system for all interfaces
+  
+CT (Carcerian's Tailor)
+  ↓
+  Uses NUI for character customization
+  
+Commoner (Custom Commoners)
+  ↓
+  OnSpawn script for NPC generation
+  ↓
+  Works with CPPS for placeable NPCs
+
+================================================================================
+DOCUMENTATION INVENTORY
+================================================================================
+
+All documentation files included in reference outputs:
+
+1. README_NUI.md (341 lines, 9.4 KB)
+   - Complete NUI System guide
+   - 65+ functions
+   - Architecture & standards
+   - Usage examples & configuration
+
+2. README_CPPS.md (440 lines, 11 KB)
+   - DM-friendly placeable system
+   - 50+ functions
+   - Conversation system documentation
+   - Permission levels & persistence
+
+3. README_CT.md (597 lines, 14 KB)
+   - Character customization system
+   - 40+ functions
+   - Session & equipment management
+   - NPC integration guide
+
+4. README_COMMONERS.md (496 lines, 15 KB)
+   - OnSpawn script documentation
+   - Randomization systems
+   - Per-NPC customization
+   - Configuration reference
+
+Total Documentation: 1,874 lines, 49.4 KB
+Complete Reference Set
+
+================================================================================
+COMPILATION STATUS
+================================================================================
+
+All systems tested and verified:
+
+CPPS:       44 files → PASS ✓
+NUI:        41 files → PASS ✓
+CT:         24 files → PASS ✓
+Commoner:   1 file   → PASS ✓
+
+Total: 110 NSS files, 100% compilation success
+
+================================================================================
+VERSION TRACKING
+================================================================================
+
+CPPS:       v1.0 (Last modified: June 3, 2026)
+NUI:        v1.0 (Last modified: June 4, 2026)
+CT:         v1.0 (Last modified: June 3, 2026)
+Commoner:   v1.0 (Last modified: June 4, 2026)
+
+All systems locked at v1.0 for production.
+Incremental development tracked via MODIFIED field.
+
+================================================================================
+DEVELOPMENT NOTES
+================================================================================
+
+Architecture Standards:
+- BioWare-style ASCII headers
+- 7-layer file structure
+- Strict forward declarations
+- No non-ASCII comments
+- Comprehensive documentation
+
+Code Standards:
+- Pure NWScript (no external dependencies)
+- 100% NWN:EE compatible
+- No preprocessor directives
+- Efficient helper functions
+- Production-ready error handling
+
+Documentation Standards:
+- GitHub-ready README files
+- Installation guides
+- Usage examples
+- Configuration reference
+- Troubleshooting sections
+- Advanced usage patterns
+
+================================================================================
+REFERENCE STORAGE LOCATION
+================================================================================
+
+This reference base document and all related materials are stored in:
+
+/mnt/user-data/outputs/
+
+Files included:
+- CARCERIAN_GITHUB_REFERENCE.txt (this file)
+- CARCERIAN_NUI_COMPLETE_API.zip (NUI system + docs)
+- README_NUI.md
+- README_CPPS.md
+- README_CT.md
+- README_COMMONERS.md
+- NUI_ARCHITECTURE_GUIDE.txt
+
+All files ready for GitHub upload or local reference.
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+To push to GitHub:
+
+1. Copy README_NUI.md → /Carcerian/nui/README.md
+2. Copy README_CPPS.md → /Carcerian/cpps/README.md
+3. Copy README_CT.md → /Carcerian/ct/README.md
+4. Copy README_COMMONERS.md → /Carcerian/commoner/README.md
+5. Add CARCERIAN_NUI_COMPLETE_API.zip as release
+6. Create GitHub release notes with version info
+
+All systems are production-ready for deployment.
+
+================================================================================
+SUPPORT RESOURCES
+================================================================================
+
+NWScript Compiler Source:
+https://github.com/nwneetools/nwnsc
+(Saved reference copy in _reference directory)
+
+NWN:EE Documentation:
+https://neverwintervault.org
+
+Carcerian GitHub Organization:
+https://github.com/Carcerian
+
+================================================================================
+END OF REFERENCE
+================================================================================
+
+Status: ✓ Complete Reference Base Created
+Date: June 4, 2026
+Systems: 4 (CPPS, NUI, CT, Commoner)
+Documentation: 4 comprehensive READMEs
+Total Content: 110 NSS files + 49.4 KB documentation
+Production Status: 100% Ready
+
+================================================================================

@@ -1,0 +1,184 @@
+================================================================================
+SHOULD nui_handler AND nui_event BE MERGED?
+================================================================================
+
+DIRECT ANSWER: NO - But here's why it matters:
+
+================================================================================
+THE CORE ISSUE
+================================================================================
+
+They DO work DIFFERENTLY but BOTH call the SAME function:
+
+nui_handler.nss:
+  void main() { HandleNuiEvent(); }
+
+nui_event.nss:
+  void main() { HandleNuiEvent(); }
+  THEN calls RouteNuiEvent() for routing
+
+So:
+  - nui_handler = Just calls HandleNuiEvent()
+  - nui_event = Calls HandleNuiEvent() THEN adds routing layer
+
+They're NOT truly separate. They're LAYERED.
+
+================================================================================
+CAN THEY BE MERGED? YES, TECHNICALLY
+================================================================================
+
+You could make ONE file that does BOTH:
+
+    void main()
+    {
+        HandleNuiEvent();  // Always dispatch the event
+        
+        // OPTIONAL: Also route if complex dialog
+        int nDialogType = NUI_GetDialogType(OBJECT_SELF);
+        if (nDialogType > 0)
+        {
+            RouteNuiEvent(oPC, nDialogType, ...);
+        }
+    }
+
+This would work fine. Both modes in one script.
+
+================================================================================
+SHOULD THEY BE MERGED? NO - HERE'S WHY
+================================================================================
+
+1. COGNITIVE LOAD (Learning/Understanding)
+   
+   Merged (300+ lines):
+   - "What does this file do?"
+   - "Which parts do I need?"
+   - "How do I customize this?"
+   - CONFUSING
+   
+   Separate (30 lines + 280 lines):
+   - nui_handler: "Just calls the dispatcher" ✓ CLEAR
+   - nui_event: "Does routing" ✓ CLEAR
+   - Pick one, understand it, use it ✓ SIMPLE
+
+2. ZERO PERFORMANCE GAIN
+   
+   Merging saves nothing:
+   - Same function calls either way
+   - Same logic either way
+   - Only difference is WHERE the code lives
+   
+   So merging gains: NOTHING
+   But costs: CONFUSION
+
+3. MODULARITY (Your code's flexibility)
+   
+   Separate:
+   - Use nui_handler → Simple (95% of dialogs)
+   - Use nui_event → Complex (5% of dialogs)
+   - Create custom handler → Hybrid (mix both)
+   
+   Merged:
+   - Use one file for everything
+   - Must understand ALL code even if you only need PART
+   - Can't use without the parts you don't need
+
+4. REAL-WORLD ANALOGY
+   
+   Separate = Restaurant Menu
+     - Appetizers section
+     - Main courses section
+     - Desserts section
+     - Pick what you want ✓
+   
+   Merged = One giant list
+     - Everything mixed together
+     - Harder to find what you want ✗
+
+================================================================================
+THE REAL ANSWER
+================================================================================
+
+They're ALREADY as merged as they should be.
+
+Both:
+  ✓ Call HandleNuiEvent() (the core)
+  ✓ Use nui_api_handle (the foundation)
+  ✓ Process button clicks the same way
+  ✓ Execute callbacks the same way
+
+Only difference:
+  nui_handler: STOPS after HandleNuiEvent()
+  nui_event: ALSO does routing with RouteNuiEvent()
+
+Think of it like this:
+
+    nui_api_handle = The engine
+    nui_handler = Engine alone (simple car)
+    nui_event = Engine + transmission (complex car)
+
+Should you merge the engine into the transmission?
+  No, the engine is reusable.
+  
+Should you merge the car and transmission into one thing?
+  No, you'd pick which one you need.
+
+================================================================================
+WHAT YOU SHOULD DO
+================================================================================
+
+RIGHT NOW:
+  Keep them separate
+  This is the correct design
+  No changes needed
+
+IF YOU WANT TO UNDERSTAND THEM BETTER:
+  Look at what they both share:
+    - HandleNuiEvent() [in nui_api_handle]
+    - HandleButtonOk/Cancel/Yes/No/Back/Close [in nui_api_handle]
+    - ExecuteNUICallback() [in nui_api_handle]
+  
+  This is the CORE - both depend on it
+  
+  Then see what's different:
+    - nui_handler: Just uses the core
+    - nui_event: Uses the core + adds routing
+
+IF YOU'RE BUILDING SOMETHING NEW:
+  Pick one:
+    - Simple dialogs? Use nui_handler as template
+    - Complex system? Use nui_event as template
+    - Custom need? Start with nui_handler, add what you need
+
+================================================================================
+SUMMARY
+================================================================================
+
+Should they be merged? NO
+
+Why not?
+  - Clear separation of concerns
+  - Easy to understand
+  - No performance gain from merging
+  - Modularity (pick what you need)
+  - Both use same core anyway
+
+Are they truly different? YES AND NO
+
+Yes different:
+  - nui_handler = simple (no routing)
+  - nui_event = complex (with routing)
+
+No different:
+  - Both use HandleNuiEvent()
+  - Both process buttons same way
+  - Both execute callbacks same way
+  - nui_event just adds optional routing
+
+Think of it like:
+  - HandleNuiEvent() = The shared brain
+  - nui_handler = Simple app using the brain
+  - nui_event = Complex app using the brain + extra routing
+
+Perfect design. Keep as-is.
+
+================================================================================

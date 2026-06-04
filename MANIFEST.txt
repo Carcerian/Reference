@@ -1,0 +1,237 @@
+================================================================================
+CARCERIAN NUI FRAMEWORK - v1.0 MANIFEST
+================================================================================
+
+Complete inventory of all NSS files with their contents.
+This manifest lists constants, functions, and includes for each file.
+
+Use this to look up missing functions/constants during debugging.
+Most "undefined identifier" errors are missing forward DECLARATIONS, not 
+missing implementations. Check this manifest first.
+
+================================================================================
+MASTER CONSTANT REGISTRY
+================================================================================
+
+System Enable Flags (defined in nui_api.nss):
+  const int NUI_BODY = 1;
+  const int NUI_CRAFT = 1;
+  const int NUI_CT = 1;
+  const int NUI_EMOTE = 1;
+  const int NUI_PLC = 1;
+  const int NUI_PVP = 1;
+  const int NUI_VFX = 1;
+  const int NUI_REST = 1;
+  const int NUI_PERSIST = 1;
+
+Dialog Type Constants (defined in nui_api.nss):
+  const int NUI_DIALOG_BODY_ADJUST = 1;
+  const int NUI_DIALOG_CRAFT = 2;
+  const int NUI_DIALOG_CLOTHING = 3;
+  const int NUI_DIALOG_EMOTE = 4;
+  const int NUI_DIALOG_PLACEABLE = 5;
+  const int NUI_DIALOG_PVP_OPTIONS = 6;
+  const int NUI_DIALOG_REST = 7;
+  const int NUI_DIALOG_VFX_CHAIN = 8;
+
+Debug Flags (defined in nui_api.nss):
+  const int NUI_DEBUG = 0;
+  const int NUI_DEBUG_BODY = 0;
+  const int NUI_DEBUG_CRAFT = 0;
+  const int NUI_DEBUG_CT = 0;
+  const int NUI_DEBUG_EMOTE = 0;
+  const int NUI_DEBUG_PLC = 0;
+  const int NUI_DEBUG_PVP = 0;
+  const int NUI_DEBUG_VFX = 0;
+  const int NUI_DEBUG_REST = 0;
+  const int NUI_DEBUG_PERSIST = 0;
+
+Handler String (defined in nui_api.nss):
+  const string NUI_HANDLER = "nui_handler";
+
+================================================================================
+MASTER FUNCTION REGISTRY
+================================================================================
+
+LOGGING FUNCTIONS (nui_log.nss):
+  void NUI_Log(object oPC, string sMessage, int nLevel)
+  void NUI_DebugBody(object oPC, string sMessage, int nLevel)
+  void NUI_DebugCraft(object oPC, string sMessage, int nLevel)
+  void NUI_DebugCt(object oPC, string sMessage, int nLevel)
+  void NUI_DebugEmote(object oPC, string sMessage, int nLevel)
+  void NUI_DebugPlc(object oPC, string sMessage, int nLevel)
+  void NUI_DebugPvP(object oPC, string sMessage, int nLevel)
+  void NUI_DebugRest(object oPC, string sMessage, int nLevel)
+
+DIALOG MANAGEMENT (nui_validate.nss):
+  int NUI_GetDialogType(object oPC)
+  void NUI_SetDialogType(object oPC, int nType)
+  string NUI_GetDialogToken(object oPC)
+  void NUI_SetDialogToken(object oPC, string sToken)
+
+VALIDATION FUNCTIONS (nui_validate.nss):
+  int NUI_ValidateObject(object oObject)
+  int NUI_ValidateRange(int nValue, int nMin, int nMax)
+  int NUI_ValidateFloatRange(float fValue, float fMin, float fMax)
+  int NUI_ValidateStringLength(string sValue, int nMin, int nMax)
+  int NUI_ValidateArraySize(json jArray, int nMin, int nMax)
+  int NUI_ValidateStringNotEmpty(string sValue)
+  int NUI_ValidateColorValue(int nColor)
+  int NUI_ValidateRGBTextColor(int nRGBValue)
+  int NUI_ValidateCoordinate(float fCoord)
+  int NUI_ValidateScale(float fScale)
+  int NUI_ValidateRotation(float fRotation)
+
+EVENT HANDLERS (nui_api_handle.nss):
+  int HandleNuiEvent()
+  void HandleButtonOk(object oPC, string sAction, string sParam2, string sParam3, string sParam4)
+  void HandleButtonCancel(object oPC, string sAction, string sParam2, string sParam3, string sParam4)
+  void HandleButtonYes(object oPC, string sAction, string sParam2, string sParam3, string sParam4)
+  void HandleButtonNo(object oPC, string sAction, string sParam2, string sParam3, string sParam4)
+  void HandleButtonBack(object oPC, string sAction, string sParam2, string sParam3, string sParam4)
+  void HandleButtonClose(object oPC, string sAction, string sParam2, string sParam3, string sParam4)
+  void HandleCustomButton(object oPC, string sButtonName, string sAction, string sParam2, string sParam3, string sParam4)
+
+CORE API (nui_api.nss):
+  int NUI_DialogCreate(object oPC, string sTitle, json jContent, int nButtons, string sGeometry, string sScript, int nX, float fWidth, float fHeight)
+  int NUI_PopupMessage(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupConfirm(object oPC, string sTitle, string sMessage, string sScript)
+  int NUI_PopupYesNo(object oPC, string sTitle, string sMessage, string sScript)
+  string GetTokenByPosition(string sString, int nPosition, string sDelim)
+
+JSON UTILITIES (nui_api_json.nss):
+  json JsonArray1(json j1)
+  json JsonArray2(json j1, json j2)
+  json JsonArray3(json j1, json j2, json j3)
+  json JsonTrue()
+  json JsonFalse()
+  int GetJsonArraySize(json jArray)
+
+BODY SYSTEM (nui_body_adj.nss):
+  float NUI_GetBodyPartValue(object oPC, int nPart, string sValueType)
+  void NUI_BodyPartApply(object oPC, int nPart, float fOffX, float fOffY, float fOffZ, float fScale)
+  void NUI_BodyPartReset(object oPC, int nPart)
+  void NUI_BodyAdjustOpen(object oPC)
+  void NUI_BodyPartAdjustOpen(object oPC, int nPart)
+
+PERSISTENCE (nui_persist.nss):
+  void NUI_PersistInit()
+  void NUI_PersistInitCampaign()
+  void NUI_PersistInitMySQL()
+  void NUI_PersistSave(object oPC, string sKey, string sValue)
+  void NUI_PersistSaveFloat(object oPC, string sKey, float fValue)
+  void NUI_PersistSaveInt(object oPC, string sKey, int nValue)
+  void NUI_PersistSaveBool(object oPC, string sKey, int bValue)
+  void NUI_PersistSaveCampaign(object oPC, string sKey, string sValue)
+  void NUI_PersistSaveMySQL(object oPC, string sKey, string sValue)
+  string NUI_PersistLoad(object oPC, string sKey, string sDefault)
+  float NUI_PersistLoadFloat(object oPC, string sKey, float fDefault)
+  int NUI_PersistLoadInt(object oPC, string sKey, int nDefault)
+  int NUI_PersistLoadBool(object oPC, string sKey, int bDefault)
+  string NUI_PersistLoadCampaign(object oPC, string sKey, string sDefault)
+  string NUI_PersistLoadMySQL(object oPC, string sKey, string sDefault)
+  void NUI_PersistDelete(object oPC, string sKey)
+  void NUI_PersistDeleteCampaign(object oPC, string sKey)
+  void NUI_PersistDeleteMySQL(object oPC, string sKey)
+  void NUI_PersistDeleteAll(object oPC)
+  void NUI_PersistDeleteAllCampaign(object oPC)
+  void NUI_PersistDeleteAllMySQL(object oPC)
+  int NUI_PersistExists(object oPC, string sKey)
+  int NUI_PersistKeyExists(object oPC, string sKey)
+  void NUI_PersistDebug(int bEnable)
+
+SAFE STORAGE (nui_safe_per.nss):
+  json NUI_SafeCreateStorageKey(object oPC, string sKeyType)
+  int NUI_SafeStoreItem(object oPC, object oItem)
+  int NUI_SafeLoadItems(object oPC)
+  int NUI_SafeGetItemCount(object oPC)
+  int NUI_SafeValidateContainer(object oContainer)
+  json NUI_SafeGetContainerContents(object oContainer)
+  int NUI_SafeRestoreContainerContents(object oContainer, json jContents)
+  int NUI_SafeGetItemCategory(object oItem)
+  string NUI_SafeGetCategoryName(int nCategory)
+  int NUI_SafeGetNumItems(object oPC)
+  json NUI_SafeGetMetadata(object oPC)
+  json NUI_SafeGetItemsByCategory(object oPC, int nCategory)
+
+OUTFIT TAILORING (nui_tailor_per.nss):
+  json NUI_TailorCreateOutfit(object oPC, string sOutfitName, int nCategory)
+  int NUI_TailorSaveOutfit(object oPC, string sOutfitName, int nCategory)
+  json NUI_TailorLoadOutfit(object oPC, string sOutfitName)
+  int NUI_TailorApplyOutfit(object oPC, string sOutfitName)
+  int NUI_TailorRenameOutfit(object oPC, string sOldName, string sNewName)
+  int NUI_TailorDeleteOutfit(object oPC, string sOutfitName)
+  json NUI_TailorGetOutfitList(object oPC)
+  json NUI_TailorGetOutfitsByCategory(object oPC, int nCategory)
+  json NUI_ArmorCreateSavestate(object oPC, string sArmorName)
+  int NUI_ArmorSaveAppearance(object oPC, string sArmorName)
+  json NUI_ArmorLoadAppearance(object oPC, string sArmorName)
+  int NUI_ArmorApplyAppearance(object oPC, string sArmorName)
+  int NUI_SetPCGender(object oPC, int nGender)
+  int NUI_GetPCGender(object oPC)
+  string NUI_GetGenderName(int nGender)
+  json NUI_CreateClothingItem(string sResref, string sName, int nGender, int nCategory)
+  json NUI_FilterClothingByGender(json jClothingList, int nGenderFilter)
+  json NUI_FilterClothingByCategory(json jClothingList, int nCategory)
+  json NUI_FilterClothingByGenderAndCategory(json jClothingList, int nGender, int nCategory)
+  string NUI_GetCategoryName(int nCategory)
+
+DATA UTILITIES (nui_data.nss):
+  string NUI_DataExportAppearance(object oPC)
+  int NUI_DataImportAppearance(object oPC, string sData)
+  string NUI_DataExportAccessories(object oPC)
+  int NUI_DataImportAccessories(object oPC, string sData)
+  int NUI_DataSavePreset(object oPC, int nSlot, string sName, string sData)
+  string NUI_DataLoadPreset(object oPC, int nSlot)
+  string NUI_DataGetPresetName(object oPC, int nSlot)
+  int NUI_DataValidateString(string sData)
+  void NUI_DataClearPreset(object oPC, int nSlot)
+  json NUI_DataListPresets(object oPC)
+
+ITEM REFERENCES (nui_item_ref.nss):
+  json NUI_ItemFromResref(string sResref)
+  string NUI_GetFirstResref(string sResrefList)
+  string NUI_GetNextResref(string sResrefList, int nIndex)
+  int NUI_CountItems(string sResrefList)
+  int NUI_IsValidResref(string sResref)
+
+SUBSYSTEM FUNCTIONS (various):
+  (See individual subsystem files for complete listings)
+
+================================================================================
+FILE-BY-FILE REFERENCE
+================================================================================
+
+For detailed per-file information, see individual file sections below.
+Each file lists its INCLUDES, CONSTANTS, and FUNCTIONS.
+
+Most errors are resolved by checking:
+1. Is the function defined in one of the files above?
+2. Is the calling file's include chain bringing in the definition?
+3. Do all case/if statements use defined constants?
+
+================================================================================
+HOW TO USE THIS MANIFEST
+================================================================================
+
+1. You get an error like:
+   ERROR: UNDEFINED IDENTIFIER (NUI_MyFunction)
+
+2. Search this manifest for "NUI_MyFunction"
+
+3. If found in a section above:
+   - The function EXISTS
+   - Check if the calling file includes the right API
+   - May need to add the include to the calling file's dependency chain
+
+4. If NOT found anywhere:
+   - Function truly doesn't exist
+   - Needs to be implemented
+
+5. For undefined CONSTANTS:
+   - Check MASTER CONSTANT REGISTRY
+   - Add missing constant to nui_api.nss
+
+================================================================================
+END OF MANIFEST
+================================================================================

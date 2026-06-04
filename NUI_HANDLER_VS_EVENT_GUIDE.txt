@@ -1,0 +1,514 @@
+================================================================================
+CARCERIAN NUI FRAMEWORK - nui_handler vs nui_event GUIDE
+================================================================================
+
+QUICK ANSWER:
+
+nui_handler:     Simple event processing (button clicks, callbacks)
+nui_event:       Complex routing (multiple dialogs, subsystem dispatch)
+
+Choose nui_handler for: Simple dialogs (95% of use cases)
+Choose nui_event for: Complex multi-subsystem interactions
+
+================================================================================
+DETAILED COMPARISON
+================================================================================
+
+FILE: nui_handler.nss
+================================================================================
+
+PURPOSE:
+  Main NUI event handler script for the module
+  Direct button click processing
+  Callback execution
+  Age verification example
+
+STRUCTURE:
+  #include "nui_api_handle"
+  
+  void main()
+  {
+      HandleNuiEvent();
+  }
+
+WHAT IT DOES:
+  1. Receives ALL NUI click events from module
+  2. Calls HandleNuiEvent() from nui_api_handle
+  3. HandleNuiEvent() routes to specific button handlers
+  4. Handlers process: OK, Cancel, Yes, No, Back, Close, Custom buttons
+  5. Specialized handler: Age check with XP rewards
+
+FLOW:
+  NUI Click Event
+    ↓
+  nui_handler::main()
+    ↓
+  HandleNuiEvent() [from nui_api_handle]
+    ↓
+  Route to button handler (OK, Cancel, Yes, No, etc)
+    ↓
+  Handler processes click
+    ↓
+  Execute callback (if configured)
+    ↓
+  Done
+
+BEST FOR:
+  ✓ Simple dialogs (message, confirm, yes/no)
+  ✓ Forms (text input, sliders, color picker)
+  ✓ Age verification
+  ✓ Quick confirmations
+  ✓ Default handler for most dialogs
+
+EXAMPLE USAGE:
+  int nToken = NUI_DialogCreate(
+      oPC, 
+      "Confirm", 
+      jContent, 
+      NUI_BTN_OK + NUI_BTN_CANCEL,
+      "NOSCALE_CENTER", 
+      "nui_handler"  ← Use this as handler
+  );
+
+TYPICAL DIALOGS:
+  - Age gate (implemented in HandleAgeCheckYes)
+  - Confirmation dialogs
+  - Simple forms
+  - Text input
+  - Slider selection
+  - Color picker
+  - Message notifications
+
+
+FILE: nui_event.nss
+================================================================================
+
+PURPOSE:
+  Event routing and subsystem dispatch
+  Routes events to appropriate subsystems
+  Multi-dialog coordination
+  Dialog type classification
+
+STRUCTURE:
+  #include "nui_api_handle"
+  
+  void main()
+  {
+      HandleNuiEvent();
+  }
+  
+  int RouteNuiEvent(object oPC, int nDialogType, string sEvent, string sElement)
+  {
+      switch (nDialogType) {
+          case NUI_DIALOG_BODY_ADJUST: ... break;
+          case NUI_DIALOG_CRAFT: ... break;
+          case NUI_DIALOG_CLOTHING: ... break;
+          // ... more subsystems
+      }
+  }
+
+WHAT IT DOES:
+  1. Receives NUI click events (if set as OnNUIEvent script)
+  2. Gets dialog type from player's current dialog
+  3. Routes to appropriate subsystem handler
+  4. Each subsystem processes its own events
+  5. Enables multiple independent dialog systems simultaneously
+
+FLOW:
+  NUI Click Event
+    ↓
+  nui_event::main()
+    ↓
+  HandleNuiEvent() [from nui_api_handle]
+    ↓
+  RouteNuiEvent() [in nui_event]
+    ↓
+  Get nDialogType from NUI_GetDialogType(oPC)
+    ↓
+  Switch on dialog type
+    ↓
+  Route to subsystem handler:
+      - Body adjustment handler
+      - Crafting handler
+      - Customization handler
+      - Emote handler
+      - Placeable handler
+      - PvP handler
+      - Rest handler
+      - VFX handler
+    ↓
+  Subsystem processes event
+    ↓
+  Done
+
+BEST FOR:
+  ✓ Multiple independent subsystems
+  ✓ Complex multi-step dialogs
+  ✓ Modular architecture
+  ✓ Server frameworks needing scalability
+  ✓ Separating concerns (each subsystem owns its handlers)
+  ✓ Advanced servers with many custom dialogs
+
+EXAMPLE USAGE:
+  int nToken = NUI_DialogCreate(
+      oPC, 
+      "Body Adjuster", 
+      jContent, 
+      NUI_BTN_OK + NUI_BTN_CANCEL,
+      "NOSCALE_CENTER", 
+      "nui_event"  ← Use this as handler
+  );
+  
+  // System automatically routes to HandleBodyAdjustmentEvent
+
+TYPICAL DIALOGS:
+  - Body part adjustment
+  - Character customization
+  - Crafting interface
+  - Emote selection
+  - Placeable editor
+  - PvP options
+  - Rest menu
+  - VFX customization
+
+================================================================================
+SIDE-BY-SIDE COMPARISON
+================================================================================
+
+ASPECT                  nui_handler             nui_event
+────────────────────────────────────────────────────────────────────────
+File Size               30 lines                280+ lines
+Complexity             Low                      High
+Learning Curve         Easy                     Moderate
+Use Cases              95%                      5% (advanced)
+Subsystems             None (generic)           8+ specialized
+Scalability            Simple dialogs only      Complex multi-dialog
+Code Organization      Flat                     Hierarchical
+Maintenance            Very Easy                Moderate
+Performance            Excellent                Excellent
+Memory Usage           Minimal                  Minimal
+
+────────────────────────────────────────────────────────────────────────
+Routing Logic          Direct to button         By dialog type
+                       handlers                 to subsystem
+────────────────────────────────────────────────────────────────────────
+Dialog Types           Generic only             Type-specific
+                       (OK, Cancel, etc)        (Body, Craft, etc)
+────────────────────────────────────────────────────────────────────────
+Handler Functions      HandleButton* in         Custom per subsystem
+                       nui_api_handle           (body_handler, etc)
+────────────────────────────────────────────────────────────────────────
+Extension Method       Custom button names      New case statement
+────────────────────────────────────────────────────────────────────────
+Example               Age gate with XP         Character customizer
+                                               with 20 settings
+────────────────────────────────────────────────────────────────────────
+
+================================================================================
+WHEN TO USE EACH
+================================================================================
+
+USE nui_handler IF:
+
+  ✓ Making simple dialogs
+  ✓ You want quick implementation
+  ✓ Don't need complex routing
+  ✓ Users interact with 1-2 dialogs at a time
+  ✓ Callbacks are simple or none
+  ✓ You're a beginner/new to NUI
+  ✓ Building basic features:
+    - Confirmations
+    - Forms
+    - Age verification
+    - Text input
+    - Slider selection
+    - Color picker
+
+EXAMPLES:
+  - "Are you sure?" dialog
+  - "Enter your name" form
+  - "Age verification" gate
+  - "Choose difficulty" slider
+  - "Pick a color" palette
+
+────────────────────────────────────────────────────────────────────────
+
+USE nui_event IF:
+
+  ✓ Building complex subsystems
+  ✓ Server framework with many modules
+  ✓ Need to route different dialogs to different handlers
+  ✓ Users interact with multiple different dialog types
+  ✓ Each subsystem has its own logic
+  ✓ You're an advanced developer
+  ✓ Building enterprise features:
+    - Body/appearance customization (20+ params)
+    - Crafting system (recipe selection, materials)
+    - Character customization (race, class, equipment)
+    - Placeable editor (position, rotation, scale)
+    - PvP options (class selection, loadouts)
+
+EXAMPLES:
+  - Character creation wizard (multi-step, type-specific)
+  - Crafting menu (different logic than body adjuster)
+  - Customization system (routing to appropriate subsystem)
+  - Server framework (multiple independent systems)
+
+================================================================================
+ARCHITECTURE EXAMPLES
+================================================================================
+
+EXAMPLE 1: Simple Server (Use nui_handler)
+═══════════════════════════════════════════════════════════════════════
+
+Module Properties > Events > OnNUIEvent = "nui_handler"
+
+void main() {
+    HandleNuiEvent();  // All dialogs handled here
+}
+
+Dialog 1: Age Gate
+  → HandleButtonYes → HandleAgeCheckYes
+  → HandleButtonNo → HandleAgeCheckNo
+
+Dialog 2: Shop Menu
+  → HandleCustomButton("buy") → Your custom logic
+  → HandleCustomButton("sell") → Your custom logic
+
+Dialog 3: Settings
+  → HandleButtonOk → Save settings
+  → HandleButtonCancel → Discard
+
+Simple, direct, perfect for small/medium servers.
+
+
+EXAMPLE 2: Complex Server (Use nui_event)
+═══════════════════════════════════════════════════════════════════════
+
+Module Properties > Events > OnNUIEvent = "nui_event"
+
+void main() {
+    HandleNuiEvent();  // Routes based on dialog type
+}
+
+int RouteNuiEvent(object oPC, int nDialogType, ...) {
+    switch (nDialogType) {
+        case NUI_DIALOG_BODY_ADJUST:
+            return HandleBodyAdjustmentEvent(...);
+        case NUI_DIALOG_CRAFT:
+            return HandleCraftingEvent(...);
+        case NUI_DIALOG_CLOTHING:
+            return HandleCTEvent(...);
+        // ... 5 more subsystems
+    }
+}
+
+Dialog Type 1: Body Adjustment
+  → RouteNuiEvent → case NUI_DIALOG_BODY_ADJUST
+  → HandleBodyAdjustmentEvent (in nui_body_handler or similar)
+  → Processes all body-related clicks
+
+Dialog Type 2: Crafting
+  → RouteNuiEvent → case NUI_DIALOG_CRAFT
+  → HandleCraftingEvent (in nui_craft_handler)
+  → Processes all crafting-related clicks
+
+Dialog Type 8: VFX Chain
+  → RouteNuiEvent → case NUI_DIALOG_VFX_CHAIN
+  → HandleVfxEvent (in nui_vfx_handler)
+  → Processes all VFX-related clicks
+
+Each subsystem owns and controls its own events. Clean separation of concerns.
+
+
+EXAMPLE 3: Hybrid Approach (Mix Both)
+═══════════════════════════════════════════════════════════════════════
+
+Module Properties > Events > OnNUIEvent = "nui_handler"
+
+For simple dialogs → use "nui_handler"
+For complex subsystems → use custom "nui_craft_handler" or "nui_body_handler"
+
+Dialog 1: Age Gate
+  → Handler: "nui_handler"
+  → Uses generic button handlers
+
+Dialog 2: Crafting System
+  → Handler: "nui_craft_handler"
+  → Custom handler with specialized logic
+
+Dialog 3: Confirmation
+  → Handler: "nui_handler"
+  → Uses generic button handlers
+
+This is actually the best practice - use nui_handler as default, create
+custom handlers only when needed for complex subsystems.
+
+================================================================================
+CODE COMPARISON
+================================================================================
+
+SCENARIO: User clicks "Buy" button in shop dialog
+
+USING nui_handler:
+────────────────────────────────────────────────────────────────────────
+
+int HandleCustomButton(oPC, "buy", sAction, sParam2, sParam3, sParam4)
+{
+    // Parse which item to buy from sParam2
+    int nItemID = NUI_ParseIntParam(sParam2, -1);
+    
+    // Purchase logic here
+    if (nItemID >= 0) {
+        HandleShopPurchase(oPC, nItemID);
+    }
+    
+    return NUI_HANDLER_SUCCESS;
+}
+
+All shop logic mixed with other custom buttons.
+Simple but can get messy with many custom buttons.
+
+────────────────────────────────────────────────────────────────────────
+
+USING nui_event WITH CUSTOM SHOP HANDLER:
+────────────────────────────────────────────────────────────────────────
+
+// nui_event.nss - route to shop handler
+case NUI_DIALOG_SHOP:
+    return HandleShopEvent(oPC, sEvent, sElement);
+
+// nui_shop_handler.nss - shop-specific logic
+int HandleShopEvent(oPC, sEvent, sElement)
+{
+    if (sElement == "btn_buy") {
+        int nItemID = GetLocalInt(oPC, "shop_selected_item");
+        HandleShopPurchase(oPC, nItemID);
+        return NUI_HANDLER_SUCCESS;
+    }
+    
+    if (sElement == "btn_sell") {
+        // Sell logic
+    }
+    
+    if (sElement == "btn_compare") {
+        // Compare logic
+    }
+    
+    return 0;
+}
+
+Clean separation. All shop logic in one place.
+Scales well as shop features grow.
+
+================================================================================
+DECISION TREE
+================================================================================
+
+Start here:
+┌─────────────────────────────────────────┐
+│ Are you building a simple dialog?       │
+│ (message, form, confirmation)           │
+└────────────┬────────────────────────────┘
+             │
+       YES   │   NO
+             ▼
+        ┌────────────────────────┐
+        │  Use nui_handler       │
+        │  Simple, clean, done!  │
+        └────────────────────────┘
+
+             │
+             ▼
+┌─────────────────────────────────────────┐
+│ Does your dialog need custom routing    │
+│ or type-specific handling?              │
+└────────────┬────────────────────────────┘
+             │
+       YES   │   NO
+             ▼
+        ┌────────────────────────┐
+        │ Use nui_event or       │
+        │ custom handler         │
+        │ Complex, modular       │
+        └────────────────────────┘
+
+             │
+             ▼
+        Still use
+        nui_handler
+        (simple enough)
+
+================================================================================
+REAL WORLD EXAMPLES
+================================================================================
+
+TAVERN SERVER (Use nui_handler)
+═════════════════════════════════════════════════════════════════════
+
+Dialogs:
+  1. "Buy ale" - NUI_PopupConfirm with nui_handler
+  2. "Rent room" - NUI_PopupInt with nui_handler
+  3. "Message player" - NUI_PopupText with nui_handler
+
+All handled by nui_handler button handlers. Simple, elegant.
+
+────────────────────────────────────────────────────────────────────────
+
+CHARACTER CREATION SERVER (Use nui_event or custom handlers)
+═════════════════════════════════════════════════════════════════════
+
+Dialogs:
+  1. Age Gate - nui_handler
+  2. Race Selection - custom nui_chargen_handler
+  3. Class Selection - custom nui_chargen_handler
+  4. Stats Assignment - custom nui_chargen_handler
+  5. Appearance - custom nui_body_handler (reuse body adjustment logic)
+  6. Confirm Creation - nui_handler
+
+Mix both: nui_handler for simple steps, custom handlers for complex steps.
+
+────────────────────────────────────────────────────────────────────────
+
+SANDBOX BUILDER SERVER (Use nui_event with subsystems)
+═════════════════════════════════════════════════════════════════════
+
+Subsystems via nui_event routing:
+  1. Body Customization - HandleBodyAdjustmentEvent
+  2. Outfit Selection - HandleClothingEvent
+  3. Building Tools - HandleBuildingEvent
+  4. Permission Manager - HandlePermissionEvent
+  5. Settings - nui_handler (simple)
+
+Complex server needs complex routing. nui_event shines here.
+
+================================================================================
+SUMMARY
+================================================================================
+
+nui_handler:
+  - Entry point for most dialogs
+  - Generic button handlers (OK, Cancel, Yes, No, Back, Close, Custom)
+  - Great for simple features
+  - Built on top of nui_api_handle
+  - 95% of use cases
+
+nui_event:
+  - Routing system for complex multi-subsystem servers
+  - Routes by dialog type to appropriate handler
+  - Great for modular servers
+  - Also uses nui_api_handle underneath
+  - 5% of use cases (advanced)
+
+BOTH use:
+  - nui_api_handle (the actual event dispatcher)
+  - HandleNuiEvent() (receives button clicks)
+  - Same button handler structure
+
+PICK ONE AS MODULE OnNUIEvent:
+  - nui_handler (90% of time)
+  - nui_event (10% of time, advanced servers)
+
+START WITH nui_handler. Add custom handlers/nui_event only if needed.
+
+================================================================================

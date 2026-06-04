@@ -1,0 +1,302 @@
+================================================================================
+CARCERIAN NUI SYSTEM v1.0 - POPUP SUGGESTIONS
+================================================================================
+
+CURRENT SYSTEM STATUS:
+  - 61 popup functions (63 with Kill/Zap)
+  - 8 addon modules
+  - Comprehensive core functionality
+  
+SUGGESTED NEW POPUPS (by category):
+================================================================================
+
+SOCIAL & COMMUNICATION
+=======================
+
+1. NUI_PopupMail
+   Purpose: Mailbox/message system
+   Content: List messages, read/compose mail
+   Use: Player-to-player communication, quest updates
+
+2. NUI_PopupFriends
+   Purpose: Friends/contacts list
+   Content: Online status, guild affiliation
+   Use: Social features, party formation
+
+3. NUI_PopupGuild
+   Purpose: Guild management interface
+   Content: Members, ranks, bank, treasury
+   Use: Guild administration
+
+4. NUI_PopupParty
+   Purpose: Party management
+   Content: Members, distribution mode, chat
+   Use: Group coordination
+
+COMMERCE & ECONOMY
+===================
+
+5. NUI_PopupMerchant
+   Purpose: Advanced vendor interface
+   Content: Browse by category, compare prices
+   Use: Shopping with filters
+
+6. NUI_PopupAuction
+   Purpose: Auction house system
+   Content: Search, bid, list items
+   Use: Player economy
+
+7. NUI_PopupTaxiService
+   Purpose: Flight/teleport destinations
+   Content: Travel options with costs
+   Use: Fast travel system
+
+8. NUI_PopupVendor
+   Purpose: Quick vendor interaction
+   Content: Sell all, repair all
+   Use: Inventory management at merchants
+
+PROGRESSION & ADVANCEMENT
+==========================
+
+9. NUI_PopupTalents
+   Purpose: Talent tree/skill specialization
+   Content: Unlockable abilities, points
+   Use: Character progression
+
+10. NUI_PopupAchievements
+    Purpose: Achievement/badge tracker
+    Content: Completed, in-progress achievements
+    Use: Goals and progression tracking
+
+11. NUI_PopupReputation
+    Purpose: Faction/NPC reputation system
+    Content: Standing with factions
+    Use: Faction-locked content
+
+12. NUI_PopupPassive
+    Purpose: Passive abilities/buffs display
+    Content: Active passive effects, durations
+    Use: Character state visibility
+
+GAMEPLAY SYSTEMS
+================
+
+13. NUI_PopupSettings
+    Purpose: Game settings (volume, graphics, UI)
+    Content: Sliders for settings
+    Use: Player preferences
+
+14. NUI_PopupKeybinds
+    Purpose: Hotkey/keybind configuration
+    Content: Bind actions to keys
+    Use: Input customization
+
+15. NUI_PopupMarkers
+    Purpose: Waypoint/marker system
+    Content: Map markers, navigation targets
+    Use: Quest tracking
+
+16. NUI_PopupCompass
+    Purpose: Directional navigation
+    Content: Heading, targets, waypoints
+    Use: Navigation aid
+
+17. NUI_PopupMinimap
+    Purpose: Local area map display
+    Content: Zoomed area map with icons
+    Use: Situational awareness
+
+18. NUI_PopupLootRoll
+    Purpose: Group loot distribution
+    Content: Manage loot rolls for group
+    Use: Fair loot distribution
+
+INFORMATION & REFERENCE
+=======================
+
+19. NUI_PopupItemInfo
+    Purpose: Extended item information
+    Content: Stats, requirements, lore, price
+    Use: Item examination
+
+20. NUI_PopupNPCInfo
+    Purpose: NPC dialog/information
+    Content: Quests, services, dialog options
+    Use: NPC interaction hub
+
+21. NUI_PopupAreaInfo
+    Purpose: Location information
+    Content: Dangers, resources, fast travel
+    Use: Area preparation
+
+22. NUI_PopupBestiaryEntry
+    Purpose: Monster encyclopedia
+    Content: Creature stats, loot tables
+    Use: Combat preparation
+
+CRAFTING & GATHERING
+====================
+
+23. NUI_PopupGathering
+    Purpose: Resource gathering interface
+    Content: Available resources, quality, yield
+    Use: Mining, herbalism, logging
+
+24. NUI_PopupBrewingAlchemy
+    Purpose: Potion/alchemical crafting
+    Content: Recipe list, ingredients, yields
+    Use: Alchemy specialty
+
+25. NUI_PopupEnchanting
+    Purpose: Item enchantment system
+    Content: Available enchants, requirements
+    Use: Item modification
+
+QUEST & NARRATIVE
+=================
+
+26. NUI_PopupQuestDetails
+    Purpose: Detailed quest information
+    Content: Objectives, rewards, log
+    Use: Quest management
+
+27. NUI_PopupStoryTree
+    Purpose: Narrative choices/dialog tree
+    Content: Branching dialog options
+    Use: Story progression
+
+28. NUI_PopupQuestReward
+    Purpose: Quest completion/reward selection
+    Content: Available rewards, stats preview
+    Use: Quest turnin
+
+COMBAT & EQUIPMENT
+==================
+
+29. NUI_PopupBuffDebuff
+    Purpose: Active effects manager
+    Content: Buffs, debuffs, durations
+    Use: Status visualization
+
+30. NUI_PopupAbilityBar
+    Purpose: Hotbar/action bar customization
+    Content: Abilities, drag-drop assignment
+    Use: Combat optimization
+
+31. NUI_PopupCooldowns
+    Purpose: Active cooldown tracker
+    Content: Abilities on cooldown, time remaining
+    Use: Combat awareness
+
+32. NUI_PopupResistances
+    Purpose: Damage resistances display
+    Content: Physical/magical/elemental
+    Use: Defense information
+
+UTILITY & TOOLS
+===============
+
+33. NUI_PopupDebugConsole
+    Purpose: Developer/admin console
+    Content: Command input, output log
+    Use: Admin functions
+
+34. NUI_PopupBugReport
+    Purpose: In-game bug reporting
+    Content: Bug description, category
+    Use: Feedback system
+
+35. NUI_PopupServerStatus
+    Purpose: Server information display
+    Content: Player count, latency, time
+    Use: Server monitoring
+
+36. NUI_PopupHelp
+    Purpose: Context-sensitive help
+    Content: Help topics, tutorials, FAQs
+    Use: Player assistance
+
+ADDITIONAL ADDON MODULES SUGGESTED
+===================================
+
+1. nui_vendor_api.nss
+   - Advanced vendor functionality
+   - Multi-vendor support
+   - Inventory management
+
+2. nui_quest_api.nss
+   - Quest management system
+   - Objective tracking
+   - Log management
+
+3. nui_group_api.nss
+   - Party/group management
+   - Raid organization
+   - Loot distribution
+
+4. nui_guild_api.nss
+   - Guild management system
+   - Member management
+   - Treasury system
+
+5. nui_social_api.nss
+   - Friends list
+   - Mail system
+   - Ignore list
+
+6. nui_economy_api.nss
+   - Auction house
+   - Trading post
+   - Currency management
+
+7. nui_achievement_api.nss
+   - Achievement tracking
+   - Progress display
+   - Leaderboards
+
+8. nui_settings_api.nss
+   - Game settings
+   - Keybinds
+   - UI customization
+
+9. nui_combat_api.nss
+   - Combat information
+   - Buff/debuff display
+   - Cooldown management
+
+10. nui_loot_api.nss
+    - Loot distribution
+    - Need/greed/pass rolling
+    - Distribution history
+
+IMPLEMENTATION PRIORITY
+=======================
+
+HIGH PRIORITY (Core gameplay):
+  - NUI_PopupQuestDetails
+  - NUI_PopupMerchant
+  - NUI_PopupParty
+  - NUI_PopupBuffDebuff
+  - NUI_PopupAchievements
+
+MEDIUM PRIORITY (Enhanced experience):
+  - NUI_PopupGuild
+  - NUI_PopupAuction
+  - NUI_PopupSettings
+  - NUI_PopupTalents
+  - NUI_PopupReputation
+
+LOW PRIORITY (Quality of life):
+  - NUI_PopupMinimap
+  - NUI_PopupCompass
+  - NUI_PopupMarkers
+  - NUI_PopupDebugConsole
+  - NUI_PopupBugReport
+
+================================================================================
+TOTALS:
+  Current: 63 functions + 8 modules
+  Suggested: +36 popups + 10 modules
+  Extended: 99 functions + 18 modules (57% expansion)
+================================================================================
